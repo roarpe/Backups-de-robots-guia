@@ -1,0 +1,921 @@
+&ACCESS RO
+&REL 159
+&COMMENT Safety Position V3.0 Date:12/10/2010
+DEF safety_position (DIRECTION :IN,AREA_NR :IN,TYPE_NR :IN )
+;================================================
+; MODELO   : C-520
+; IE GRUPO : 5J
+; ESTACION : 85
+; ROBOT    : 85r01
+; FUNCTION : Safety Position
+;================================================
+;FOLD INI
+  INT DIRECTION
+  INT AREA_NR
+  INT TYPE_NR
+  
+;base_corr_on=true
+;base_corr.a=-45
+
+  IF (DIRECTION>2) OR (DIRECTION<1) THEN
+    REPEAT
+      EMPTY_MSG={MSG_T: VALID FALSE,RELEASE FALSE,TYP #NOTIFY,MODUL[] " ",KEY[] " ",PARAM_TYP #VALUE,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      $MSG_T={MSG_T: VALID FALSE,RELEASE FALSE,TYP #QUIT,MODUL[] "Safety Position",KEY[] "Direction Number Not Valid",PARAM_TYP #KEY,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      WAIT SEC 1.0
+      $MSG_T.VALID=TRUE
+      HALT
+    UNTIL (DIRECTION<3) AND (DIRECTION>0)
+  ENDIF
+  IF (AREA_NR>8) OR (AREA_NR<1) THEN
+    REPEAT
+      EMPTY_MSG={MSG_T: VALID FALSE,RELEASE FALSE,TYP #NOTIFY,MODUL[] " ",KEY[] " ",PARAM_TYP #VALUE,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      $MSG_T={MSG_T: VALID FALSE,RELEASE FALSE,TYP #QUIT,MODUL[] "Safety Position",KEY[] "Area Number Not Valid",PARAM_TYP #KEY,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      WAIT SEC 1.0
+      $MSG_T.VALID=TRUE
+      HALT
+    UNTIL (AREA_NR<9) AND (AREA_NR>0)
+  ENDIF
+  IF (TYPE_NR>8) OR (TYPE_NR<1) THEN
+    REPEAT
+      EMPTY_MSG={MSG_T: VALID FALSE,RELEASE FALSE,TYP #NOTIFY,MODUL[] " ",KEY[] " ",PARAM_TYP #VALUE,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      $MSG_T={MSG_T: VALID FALSE,RELEASE FALSE,TYP #QUIT,MODUL[] "Safety Position",KEY[] "Type Number Not Valid",PARAM_TYP #KEY,PARAM[] " ",DLG_FORMAT[] " ",ANSWER 0}
+      WAIT SEC 1.0
+      $MSG_T.VALID=TRUE
+      HALT
+    UNTIL (TYPE_NR<9) AND (TYPE_NR>0)
+  ENDIF
+  ;ENDFOLD
+  
+;====================================================================
+  
+SWITCH AREA_NR
+      
+CASE 1  ;AREA 1
+    
+  SWITCH TYPE_NR
+
+  CASE 1  ;Area 1 - Safety Position 1
+    SWITCH DIRECTION
+    CASE 1
+
+
+    CASE 2
+    ;Teach here positions from safety position to wait area
+    ;check robot movement for collision with other robots
+
+    ENDSWITCH
+      
+  CASE 2  ;Area 1 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 1 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 1 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1 ; From Area Request Position To Safety Position
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2 ; From Safety Position To Area Request Position
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 1 - Safety Position 5
+    
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 1 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 1 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 1 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from wait area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to wait area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 2  ;AREA 2
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 2 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+wait for false
+;FOLD PTP P01WAIT2 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01WAIT2, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01WAIT2
+BAS(#PTP_PARAMS,30)
+PTP XP01WAIT2 
+;ENDFOLD
+;FOLD PTP P01SAFETY_POS2 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS2, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS2
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS2 
+;ENDFOLD
+    CASE 2
+wait for false
+    ;Teach here positions from safety pos to waiting area
+;FOLD PTP P01SAFETY_POS2 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS2, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS2
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS2 
+;ENDFOLD
+;FOLD PTP P01WAIT2 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01WAIT2, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01WAIT2
+BAS(#PTP_PARAMS,30)
+PTP XP01WAIT2 
+;ENDFOLD
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 2  ;Area 2 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 2 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 2 - Safety Position 4
+      
+    SWITCH DIRECTION
+	  	CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 2 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6    ;Area 2 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7    ;Area 2 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 2 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 3  ;AREA 3
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 3 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+wait for false
+		;Teach here positions from waiting area to safety position
+;FOLD PTP P01WAIT3 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01WAIT3, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01WAIT3
+BAS(#PTP_PARAMS,30)
+PTP XP01WAIT3 
+;ENDFOLD
+;FOLD PTP P01SAFETY_POS3 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS3, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS3
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS3 
+;ENDFOLD
+		CASE 2
+wait for false
+;FOLD PTP P01SAFETY_POS3 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS3, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS3
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS3 
+;ENDFOLD
+;FOLD PTP P01WAIT3 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01WAIT3, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01WAIT3
+BAS(#PTP_PARAMS,30)
+PTP XP01WAIT3 
+;ENDFOLD
+
+    ENDSWITCH
+      
+  CASE 2  ;Area 3 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 3 - Safety Position 3
+      	
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+      ENDSWITCH
+      
+  CASE 4  ;Area 3 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 3 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 3 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 3 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 3 - Safety Position 8
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 4  ;AREA 4
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 4 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+wait for false
+		;Teach here positions from waiting area to safety position
+;FOLD PTP P1WAIT4 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P1WAIT4, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP1WAIT4
+BAS(#PTP_PARAMS,30)
+PTP XP1WAIT4 
+;ENDFOLD
+;FOLD PTP P01SAFETY_POS4 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS4, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS4
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS4 
+;ENDFOLD
+		CASE 2
+wait for false
+;FOLD PTP P01SAFETY_POS4 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P01SAFETY_POS4, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP01SAFETY_POS4
+BAS(#PTP_PARAMS,30)
+PTP XP01SAFETY_POS4 
+;ENDFOLD
+;FOLD PTP P1WAIT4 Vel=30 % h Tool[15]:C520 Con Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P1WAIT4, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP1WAIT4
+BAS(#PTP_PARAMS,30)
+PTP XP1WAIT4 
+;ENDFOLD
+
+    ENDSWITCH
+      
+  CASE 2  ;Area 4 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+	  ;Teach here positions from waiting area to safety position
+	  ;check robot movement for collision with other robots
+    CASE 2
+	  ;Teach here positions from safety position to waiting area
+  	;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 4 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 4 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 4 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 4 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 4 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 4 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 5  ;AREA 5
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 5 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+wait for false
+;FOLD PTP P17 Vel=30 % h Tool[14]:C520 Sin Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P17, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP17
+BAS(#PTP_PARAMS,30)
+PTP XP17 
+;ENDFOLD
+;FOLD PTP P18 Vel=30 % h Tool[14]:C520 Sin Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P18, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP18
+BAS(#PTP_PARAMS,30)
+PTP XP18 
+;ENDFOLD
+    CASE 2
+wait for false
+;FOLD PTP P19 Vel=30 % h Tool[14]:C520 Sin Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P19, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP19
+BAS(#PTP_PARAMS,30)
+PTP XP19 
+;ENDFOLD
+;FOLD PTP P20 Vel=30 % h Tool[14]:C520 Sin Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P20, 3:, 5:30, 7:h
+$BWDSTART=FALSE
+PDAT_ACT=Ph
+FDAT_ACT=FP20
+BAS(#PTP_PARAMS,30)
+PTP XP20 
+;ENDFOLD
+    ENDSWITCH
+      
+  CASE 2  ;Area 5 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 5 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 5 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 5 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 5 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 5 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 5 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 6  ;AREA 6
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 6 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 2  ;Area 6 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 6 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 6 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 6 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 6 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 6 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 6 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 7  ;AREA 7
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 7 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 2  ;Area 7 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 7 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 7 - Safety Position 4
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 7 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 7 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 7 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 7 - Safety Position 8
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  ENDSWITCH
+    
+;====================================================================
+    
+CASE 8  ;AREA 8
+    
+  SWITCH TYPE_NR
+  CASE 1  ;Area 8 - Safety Position 1
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 2  ;Area 8 - Safety Position 2
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 3  ;Area 8 - Safety Position 3
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 4  ;Area 8 - Safety Position 4
+
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 5  ;Area 8 - Safety Position 5
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 6  ;Area 8 - Safety Position 6
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 7  ;Area 8 - Safety Position 7
+      
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+      
+  CASE 8  ;Area 8 - Safety Position 8
+
+    SWITCH DIRECTION
+    CASE 1
+    ;Teach here positions from waiting area to safety position
+    ;check robot movement for collision with other robots
+    CASE 2
+    ;Teach here positions from safety position to waiting area
+    ;check robot movement for collision with other robots
+    ENDSWITCH
+  ENDSWITCH  
+ENDSWITCH
+END

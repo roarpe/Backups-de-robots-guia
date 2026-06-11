@@ -1,0 +1,146 @@
+&ACCESS RVO1
+&REL 89
+&COMMENT Main Program 1
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM EDITMASK = *
+DEF p01( ) 
+;================================================
+; MODELO   :  
+; IE GRUPO : FIP
+; ESTACION : st101
+; ROBOT    : 101R1
+; FUNCION  : unload IP from st102 load IP to st103
+;===============================================
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+;FOLD SPOTTECH INI
+;USERSPOT(#INIT)
+;ENDFOLD (SPOTTECH INI)
+;FOLD GRIPPERTECH INI
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+
+;FOLD OUT 89 'pos abrir ip manual' State=FALSE ;%{PE}%R 5.6.13,%MKUKATPBASIS,%COUT,%VOUTX,%P 2:89, 3:pos abrir ip manual, 5:FALSE, 6:
+$OUT[89]=FALSE
+;ENDFOLD
+;ENDFOLD (GRIPPERTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+i_datos_nok=false
+SALTO_RECHAZO=false
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;FOLD TORQMON SetDefault;%{PE}%R 5.6.13,%MKUKATPBASIS,%CTQ_MON,%VTQ_DEFAULT,%P 2:TQ_DEFAULT
+SET_TQ_VALUES ( )
+;ENDFOLD
+
+
+;FOLD PTP HOME Vel=100 % DEFAULT;%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:HOME, 3:, 5:100, 7:DEFAULT
+$BWDSTART=FALSE
+PDAT_ACT=PDEFAULT
+FDAT_ACT=FHOME
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP XHOME 
+;ENDFOLD
+
+;FOLD START CYCLUS TIMER
+$TIMER[1]=0
+$TIMER_STOP[1]=FALSE
+;ENDFOLD
+;espera deteccion pieza a 0 (no cebado)
+WAIT FOR not ( $IN[109] ) 
+
+home2wait()
+
+
+IF I_RETHP THEN            ; RETURN TO HOME
+  GOTO HOMEPOS
+ENDIF
+
+$TIMER[2]=0
+$TIMER_STOP[2]=FALSE
+p01pick1_s1 ( )               ; pick IP st102
+
+;IF I_RETHP THEN           ; RETURN TO HOME
+;WAIT FOR FALSE            ;CHEQUEAR VUELTAS A HOME
+;  GOTO HOMEPOS
+;ENDIF
+
+IF I_DATOS_NOK THEN            ; RETURN TO HOME
+  GOTO HOMEPOS
+ENDIF
+
+
+;fold espera info balancina nueva vieja
+;wait for i_type_info==0
+;o_type_req=true
+;wait for (i_type_info==3) or (i_type_info==4)
+;M_I_TYPE_INFO=I_TYPE_INFO
+;O_TYPE_REQ=FALSE
+
+
+;endfold
+RECHAZO_LBL:
+salto_rechazo=false
+;fold ESPERA AREA DEJADA ARRIBA O ABAJO
+wait for $in[18] or $in[19]
+;endfold
+
+;DEJADA ARRIVA
+if $in[18] then
+SWITCH M_I_TYPE_INFO
+case 4
+  p01drop1_s1()              ; drop IP st103 bal vieja
+case 3
+  p01drop1_s1()              ; drop IP st103 bal nueva
+default
+wait for false
+endswitch
+endif
+
+;DEJADA ABAJO
+if $in[19] then
+SWITCH M_I_TYPE_INFO
+case 4
+  p01drop2_s1()              ; drop IP st103 bal vieja
+case 3
+  p01drop2_s1()              ; drop IP st103 bal nueva
+default
+wait for false
+endswitch
+endif
+
+IF SALTO_RECHAZO THEN
+ GOTO RECHAZO_LBL
+ENDIF
+
+IF I_DATOS_NOK THEN            ; RETURN TO HOME
+ ; RECHAZOEMS()
+  GOTO HOMEPOS
+ENDIF
+
+
+HOMEPOS:
+
+;FOLD PTP HOME  Vel= 100 % DEFAULT;%{PE}%R 5.4.33,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:HOME, 3:, 5:100, 7:DEFAULT
+$BWDSTART=FALSE
+PDAT_ACT=PDEFAULT
+FDAT_ACT=FHOME
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP XHOME 
+;ENDFOLD
+
+;FOLD STOP CYCLUS TIMER
+$TIMER_STOP[1]=TRUE
+$TIMER[6]=$TIMER[1]
+;ENDFOLD
+
+
+INIT_EXT ( ) ;INIT AUTO_EXTERN
+
+END

@@ -1,0 +1,49 @@
+&ACCESS RVP
+&REL 6
+&COMMENT MANTENIMIENTO
+DEF service2( )
+;================================================
+; MODELO   : C-520
+; IE GRUPO : 5J
+; ESTACION : 85
+; ROBOT    : 85R02
+; FUNCTION : MAINTENANCE PROGRAM
+;================================================
+;FOLD INI
+;FOLD BASISTECH INI
+GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+INTERRUPT ON 3
+BAS (#INITMOV,0 )
+;ENDFOLD (BASISTECH INI)
+;FOLD SPOTTECH INI
+USERSPOT(#INIT)
+;ENDFOLD (SPOTTECH INI)
+;FOLD GRIPPERTECH INI
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+;ENDFOLD (GRIPPERTECH INI)
+;FOLD USER INI
+;Make your modifications here
+base_corr_on=true
+base_corr.a=-45
+;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+
+
+;FOLD PTP Serv_Pos_1 Vel=100 % H Tool[14]:C520 Sin Pieza Base[0];%{PE}%R 5.6.13,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:Serv_Pos_1, 3:, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FServ_Pos_1
+BAS(#PTP_PARAMS,100)
+PTP XServ_Pos_1 
+;ENDFOLD
+
+; Maintenance position
+O_SERVP=TRUE
+
+;Wait return to home
+WAIT FOR I_RETHP == TRUE
+
+
+O_SERVP=FALSE
+
+END
