@@ -1,0 +1,68 @@
+&ACCESS RVP1
+&REL 89
+&COMMENT Service For Tool 1
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Service Programs
+DEF Service1( )
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+;FOLD SPOTTECH INI
+USERSPOT(#INIT)
+;ENDFOLD (SPOTTECH INI)
+;FOLD GRIPPERTECH INI
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+;ENDFOLD (GRIPPERTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+  ;ENDFOLD (USER INI)
+ ;ENDFOLD (INI)
+;================================================
+; MODEL    : CX482
+; IE GROUP : PHEV
+; STATION  : 110
+; ROBOT    : 110R1
+; FUNCTION : Service For Tool 1
+;================================================
+
+
+;FOLD PTP Start_Service1 Vel=100 % H Tool[11]:Gripper Leak Test Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:Start_Service1, 3:, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FStart_Service1
+BAS(#PTP_PARAMS,100)
+PTP XStart_Service1 
+;ENDFOLD
+
+;FOLD PTP ServicePos1 Vel=100 % H Tool[11]:Gripper Leak Test Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:ServicePos1, 3:, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FServicePos1
+BAS(#PTP_PARAMS,100)
+PTP XServicePos1 
+;ENDFOLD
+
+O_SERVP=true
+;FOLD Wait For Return To Home
+;Robot In Service Position
+O_SERVP=TRUE             
+;Wait For Input Return To Home
+WAIT FOR I_RETHP == TRUE
+;ENDFOLD (Wait For Return To Home)
+
+;FOLD PTP End_Service1 Vel=100 % H Tool[11]:Gripper Leak Test Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:End_Service1, 3:, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FEnd_Service1
+BAS(#PTP_PARAMS,100)
+PTP XEnd_Service1 
+;ENDFOLD
+
+;Reset Robot In Service Position
+O_SERVP=FALSE
+
+END

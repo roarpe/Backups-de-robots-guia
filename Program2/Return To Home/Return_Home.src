@@ -1,0 +1,626 @@
+&ACCESS RVO
+&REL 50
+&COMMENT Return to Home
+DEF RETURN_HOME (AREA_NR :IN,RETHME :IN )
+;FOLD INI
+  INT AREA_NR
+  INT RETHME
+  decl KrlMsg_T msg
+  decl KrlMsgPar_T par[3]
+  decl KrlMsgOpt_T opt
+  INT nHandle
+  
+  IF RETHME==0 THEN
+    REPEAT
+    	  msg = {modul[] "Return_Home", nr 1, msg_txt[] "Return to Home path not configured !!"}
+
+  			opt = {vl_stop true, clear_p_reset true, clear_p_SAW false, log_to_DB false}
+  
+  			nHandle = Set_KrlMsg(#notify, msg, par[], opt)
+      HALT
+    UNTIL (RETHME<9) AND (RETHME>0)
+  ENDIF
+  
+  IF (RETHME>8) OR (RETHME<1) THEN
+	    REPEAT
+	    	  msg = {modul[] "Return_Home", nr 4, msg_txt[] "Return To Home Number Not Valid !!!!"}
+	  
+	  			opt = {vl_stop true, clear_p_reset true, clear_p_SAW false, log_to_DB false}
+	  
+	  			nHandle = Set_KrlMsg(#notify, msg, par[], opt)
+	      HALT
+	    UNTIL (RETHME<9) AND (RETHME>0)
+  ENDIF  
+  
+  IF (AREA_NR>8) OR (AREA_NR<1) THEN
+    REPEAT
+    	  msg = {modul[] "Return_Home", nr 2, msg_txt[] "Area Number Not Valid !!!!"}
+  
+  			opt = {vl_stop true, clear_p_reset true, clear_p_SAW false, log_to_DB false}
+  
+  			nHandle = Set_KrlMsg(#notify, msg, par[], opt)
+      HALT
+    UNTIL (AREA_NR<9) AND (AREA_NR>0)
+  ENDIF
+  ;ENDFOLD
+;================================================
+; MODEL     :CX482 
+; IE GROUP  :PHEV 
+; STATION   :110 
+; ROBOT     :110R1
+; FUNCTION  : Return To Home Position
+;================================================
+  
+SWITCH AREA_NR
+      
+CASE 1  ;AREA 1
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 1.1 
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 1.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 1.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 1.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 1.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 1.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 1.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 1.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 2  ;AREA 2
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 2.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 2.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 2.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 2.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 2.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 2.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 2.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 2.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 3  ;AREA 3
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 3.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 3.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 3.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 3.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 3.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 3.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 3.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 3.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+		
+CASE 4  ;AREA 4
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 4.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 4.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 4.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 4.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 4.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 4.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 4.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 4.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 5  ;AREA 5
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 5.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 5.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 5.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 5.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 5.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 5.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 5.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 5.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 6  ;AREA 6
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 6.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 6.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 6.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 6.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 6.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 6.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 6.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 6.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 7  ;AREA 7
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 7.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 7.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 7.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 7.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 7.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 7.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 7.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 7.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+CASE 8  ;AREA 8
+    
+		SWITCH RETHME
+		      
+			CASE 1  ;Return To Home 8.1
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 2  ;Return To Home 8.2
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 3  ;Return To Home 8.3
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 4  ;Return To Home 8.4
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 5  ;Return To Home 8.5
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 6  ;Return To Home 8.6
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 7  ;Return To Home 8.7
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+			
+			CASE 8  ;Return To Home 8.8
+			    
+			;Teach here positions from wait area to Home Position
+			;check robot movement for collision with other robots
+			
+			;Delete if movement is used 
+			WAIT FOR FALSE
+		
+		ENDSWITCH
+
+DEFAULT
+    REPEAT
+    	  msg = {modul[] "Return_Home", nr 3, msg_txt[] "Return to Home path not configured !!"}
+  
+  			opt = {vl_stop true, clear_p_reset true, clear_p_SAW false, log_to_DB false}
+  
+  			nHandle = Set_KrlMsg(#notify, msg, par[], opt)
+      HALT
+    UNTIL (AREA_NR<9) AND (AREA_NR>0)
+ENDSWITCH
+END

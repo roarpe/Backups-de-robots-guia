@@ -1,0 +1,324 @@
+&ACCESS RVO1
+&REL 3658
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Sub Programs
+DEF panpick( )
+;FOLD INI;%{PE}
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+INPICKER_Handler.DataToSend.command=0  
+ wait for (INPICKER_Handler.DataReceived.state==0)
+REINTENTO=FALSE
+;CILS_INIT()
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;POS FOTO 1
+XP03=$POS_ACT
+PUNTOFOTO:
+;FOLD PTP P03 Vel=100 % PDAT1 Tool[0] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P03, 3:, 5:100, 7:PDAT1
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT1
+FDAT_ACT=FP03
+BAS(#PTP_PARAMS,100)
+PTP XP03 
+;ENDFOLD
+INICIOFOTO:
+
+;fold espera foto
+
+ INPICKER_Handler.DataToSend.command=1  
+ wait for (INPICKER_Handler.DataReceived.state==30) or (INPICKER_Handler.DataReceived.state==-1)
+  
+ wait sec 0.5
+ 
+ IF (INPICKER_Handler.DataReceived.state==-1) THEN
+  ; wait for false
+   IF (REINTENTO==FALSE) THEN
+      
+   REINTENTO=TRUE
+   INPICKER_Handler.DataToSend.command=0
+   wait for (INPICKER_Handler.DataReceived.state==0)
+   GOTO INICIOFOTO
+   
+   ELSE
+   
+;FOTO NOK
+;FOLD Fordtech.Tool_Req Tool Request: 1 ;%{PE}%MKUKATPUSER
+
+Tool_Req (1)
+
+;ENDFOLD
+;FOLD Fordtech.Wait_Tool_Ready Wait Tool Ready: 1 ;%{PE}%MKUKATPUSER
+
+Wait_Tool_Ready (1)
+
+;ENDFOLD
+BACKJUMP=TRUE
+GOTO PEXIT
+
+   ENDIF
+   
+ENDIF
+
+;ENDFOLD
+
+;EVALUA foto
+
+IF (INPICKER_Handler.DataReceived.ObjectsGraspable>0)THEN
+
+;FOLD CARGA FRAMEXP01
+;FOTO OK
+FRAMEAUX={X 0,Y 0,Z 0,A 0,B 0,C 0}
+FRAMEAUX=INPICKER_Handler.DataReceived.PartsToGrasp0.Position
+XP01.x=FRAMEAUX.x/10
+XP01.y=(FRAMEAUX.y/10)-2
+XP01.z=(FRAMEAUX.z/10)+7
+XP01.a=(FRAMEAUX.a/10)+0.5
+XP01.b=FRAMEAUX.b/10
+XP01.c=FRAMEAUX.c/10
+;ENDFOLD
+
+;FOLD CARGA FRAME XP02
+FRAMEAUX={X 0,Y 0,Z 0,A 0,B 0,C 0}
+FRAMEAUX=INPICKER_Handler.DataReceived.PartsToGrasp0.PreGrasp0
+XP02.x=FRAMEAUX.x/10
+XP02.y=(FRAMEAUX.y/10)-2
+XP02.z=(FRAMEAUX.z/10)+7
+XP02.a=(FRAMEAUX.a/10)+0.5
+XP02.b=FRAMEAUX.b/10
+XP02.c=FRAMEAUX.c/10
+;ENDFOLD
+
+;FOLD OFFSET GIRADAS
+IF ((INPICKER_Handler.DataReceived.PartsToGrasp0.Position.A > 890) AND (INPICKER_Handler.DataReceived.PartsToGrasp0.Position.A < 1100)) THEN
+   
+FRAMEAUX={X 0,Y 0,Z 0,A 0,B 0,C 0}
+FRAMEAUX=INPICKER_Handler.DataReceived.PartsToGrasp0.Position
+XP01.x=FRAMEAUX.x/10
+XP01.y=(FRAMEAUX.y/10)-2
+XP01.z=(FRAMEAUX.z/10)+7
+XP01.a=(FRAMEAUX.a/10)+0.5
+XP01.b=FRAMEAUX.b/10
+XP01.c=FRAMEAUX.c/10
+
+FRAMEAUX={X 0,Y 0,Z 0,A 0,B 0,C 0}
+FRAMEAUX=INPICKER_Handler.DataReceived.PartsToGrasp0.PreGrasp0
+XP02.x=FRAMEAUX.x/10
+XP02.y=(FRAMEAUX.y/10)-2
+XP02.z=(FRAMEAUX.z/10)+7
+XP02.a=(FRAMEAUX.a/10)+0.5
+XP02.b=FRAMEAUX.b/10
+XP02.c=FRAMEAUX.c/10
+
+ENDIF
+;ENDFOLD   
+
+
+ELSE
+
+IF (REINTENTO==FALSE) THEN
+REINTENTO=TRUE
+INPICKER_Handler.DataToSend.command=0
+wait for (INPICKER_Handler.DataReceived.state==0)
+GOTO INICIOFOTO
+ENDIF
+
+;FOTO NOK
+;FOLD Fordtech.Tool_Req Tool Request: 1 ;%{PE}%MKUKATPUSER
+
+Tool_Req (1)
+
+;ENDFOLD
+;FOLD Fordtech.Wait_Tool_Ready Wait Tool Ready: 1 ;%{PE}%MKUKATPUSER
+
+Wait_Tool_Ready (1)
+
+;ENDFOLD
+BACKJUMP=TRUE
+GOTO PEXIT
+
+ENDIF
+
+;Va a coger array
+
+;Baja vel en arrays proximos a vallado
+IF (posbat==11) THEN
+;FOLD PTP P11 CONT Vel=100 % M2 Tool[5]:Gripper_empty Base[11];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P11, 3:C_DIS, 5:100, 7:M2
+$BWDSTART=FALSE
+PDAT_ACT=PM2
+FDAT_ACT=FP11
+BAS(#PTP_PARAMS,100)
+PTP XP11 C_DIS
+;ENDFOLD
+ACT_OV=$OV_PRO
+$OV_PRO=10
+ENDIF
+
+;Baja vel en arrays proximos a vallado
+IF (posbat==12) THEN
+;FOLD PTP P12 CONT Vel=100 % M2 Tool[5]:Gripper_empty Base[11];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P12, 3:C_DIS, 5:100, 7:M2
+$BWDSTART=FALSE
+PDAT_ACT=PM2
+FDAT_ACT=FP12
+BAS(#PTP_PARAMS,100)
+PTP XP12 C_DIS
+;ENDFOLD
+ACT_OV=$OV_PRO
+$OV_PRO=10
+ENDIF
+
+;FOLD PTP P02 CONT Vel=100 % PDAT2 Tool[5] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P02, 3:C_DIS, 5:100, 7:PDAT2
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT2
+FDAT_ACT=FP02
+BAS(#PTP_PARAMS,100)
+PTP XP02 C_DIS
+;ENDFOLD
+
+;FOLD LIN P01 Vel=2 m/s CPDAT3 Tool[5] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VLIN,%P 1:LIN, 2:P01, 3:, 5:2, 7:CPDAT3
+$BWDSTART=FALSE
+LDAT_ACT=LCPDAT3
+FDAT_ACT=FP01
+BAS(#CP_PARAMS,2)
+LIN XP01 
+;ENDFOLD
+;halt
+CIL_BAT_ACTIVO()
+
+;Revisa sensores y si falta alguno abre y cierra la garra 1 vez
+IF NOT (($IN[243] AND $IN[244] AND $IN[245] AND $IN[247])) THEN
+  $OUT[243]=TRUE
+  $OUT[244]=FALSE
+  WAIT SEC 0.5
+  $OUT[243]=FALSE
+  $OUT[244]=TRUE
+ENDIF
+
+;Eleva batería 50mm
+lin_rel {z 50}
+
+$advance=0
+;Revisa sensores de garra cerrados
+;FOLD WAIT FOR ( IN 245 'CIL array closed S301B' );%{PE}%R 8.3.48,%MKUKATPBASIS,%CEXT_WAIT_FOR,%VEXT_WAIT_FOR,%P 2:, 4:, 5:$IN, 6:245, 7:CIL array closed S301B, 9:
+WAIT FOR  ( $IN[245] ) 
+;ENDFOLD
+;FOLD WAIT FOR ( IN 247 'CIL array closed S302B' );%{PE}%R 8.3.48,%MKUKATPBASIS,%CEXT_WAIT_FOR,%VEXT_WAIT_FOR,%P 2:, 4:, 5:$IN, 6:247, 7:CIL array closed S302B, 9:
+WAIT FOR  ( $IN[247] ) 
+;ENDFOLD
+
+PART_CHECK()
+
+$advance=3
+INPICKER_Handler.DataToSend.command=0  
+
+IF REINT_COGIDA==TRUE THEN
+   lin_rel {z -40}
+   CIL_BAT_REPOSO()
+   PART_CHECK_OFF()
+   lin_rel {z 100}
+   wait for (INPICKER_Handler.DataReceived.state==0)
+   GOTO PUNTOFOTO
+ENDIF      
+
+
+;FOLD Fordtech.Tool_Req Tool Request: 2 ;%{PE}%MKUKATPUSER
+
+Tool_Req (2)
+
+;ENDFOLD
+;FOLD Fordtech.Wait_Tool_Ready Wait Tool Ready: 2 ;%{PE}%MKUKATPUSER
+
+Wait_Tool_Ready (2)
+
+;ENDFOLD
+
+;Fold guardamos posicion para carton
+IF (POSBAT==12) THEN   
+   ;IF ($POS_ACT.x>-920) AND ($POS_ACT.x<-690) THEN   
+   IF ($POS_ACT.x>-970) AND ($POS_ACT.x<-640) THEN         
+      BASE_DATA[14].x=$POS_ACT.x
+   ENDIF
+;   IF ($POS_ACT.y<2257) AND ($POS_ACT.y>2057) THEN
+   IF ($POS_ACT.y<2307) AND ($POS_ACT.y>2007) THEN
+      BASE_DATA[14].y=$POS_ACT.y
+   ENDIF
+;BASE_DATA[14].z=$POS_ACT.z
+ENDIF
+;ENDFOLD
+
+
+;fold P04
+
+FRAMEAUX={X 0,Y 0,Z 0,A 0,B 0,C 0}
+XP04=FRAMEAUX
+XP04.x=XP02.x
+XP04.y=XP02.y
+XP04.z=(XP02.z)+110
+XP04.a=XP02.a
+XP04.b=XP02.b
+XP04.c=XP02.c
+
+;ENDFOLD
+
+;FOLD PTP p04 CONT Vel=100 % PDAT4 Tool[8]:Gripper_array Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:p04, 3:C_DIS, 5:100, 7:PDAT4
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT4
+FDAT_ACT=Fp04
+BAS(#PTP_PARAMS,100)
+PTP Xp04 C_DIS
+;ENDFOLD
+
+IF (posbat==11) THEN
+;FOLD PTP P7 CONT Vel=100 % H Tool[5]:Gripper_empty Base[11];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P7, 3:C_DIS, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FP7
+BAS(#PTP_PARAMS,100)
+PTP XP7 C_DIS
+;ENDFOLD
+$OV_PRO=ACT_OV
+ENDIF
+
+IF (posbat==12) THEN
+;FOLD PTP P8 CONT Vel=100 % H Tool[5]:Gripper_empty Base[11];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P8, 3:C_DIS, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FP8
+BAS(#PTP_PARAMS,100)
+PTP XP8 C_DIS
+;ENDFOLD
+$OV_PRO=ACT_OV
+ENDIF
+
+;FOLD SYN OUT 41 'Job Ready 1' State=TRUE at START Delay=0 ms;%{PE}%R 8.3.48,%MKUKATPBASIS,%COUT,%VSYNOUT,%P 2:41, 3:Job Ready 1, 5:TRUE, 7:0, 9:0, 12:0
+TRIGGER WHEN DISTANCE=0 DELAY=0 DO $OUT[41]=TRUE
+;ENDFOLD
+BAT_MONITOR=TRUE
+
+;FOLD PTP P4 CONT Vel=90 % M2 Tool[8]:Gripper_array Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P4, 3:C_DIS, 5:90, 7:M2
+$BWDSTART=FALSE
+PDAT_ACT=PM2
+FDAT_ACT=FP4
+BAS(#PTP_PARAMS,90)
+PTP XP4 C_DIS
+;ENDFOLD
+;FOLD SYN OUT 17 'Area Release 1' State=TRUE at START Delay=0 ms;%{PE}%R 8.3.48,%MKUKATPBASIS,%COUT,%VSYNOUT,%P 2:17, 3:Area Release 1, 5:TRUE, 7:0, 9:0, 12:0
+TRIGGER WHEN DISTANCE=0 DELAY=0 DO $OUT[17]=TRUE
+;ENDFOLD
+;FOLD PTP P6 CONT Vel=100 % PDAT6 Tool[8]:Gripper_array Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P6, 3:C_DIS, 5:100, 7:PDAT6
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT6
+FDAT_ACT=FP6
+BAS(#PTP_PARAMS,100)
+PTP XP6 C_DIS
+;ENDFOLD
+
+PEXIT:
+END
+

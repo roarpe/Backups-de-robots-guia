@@ -1,0 +1,64 @@
+&ACCESS RVP
+&REL 260
+&COMMENT Movement from Service1 To Home
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Docking Programs
+DEF From_Service1( )
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+;FOLD SPOTTECH INI
+USERSPOT(#INIT)
+;ENDFOLD (SPOTTECH INI)
+;FOLD GRIPPERTECH INI
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+;ENDFOLD (GRIPPERTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;================================================
+; MODEL    : XX
+; IE GROUP : XX
+; STATION  : XX
+; ROBOT    : XX
+; FUNCTION : Movement from End_Service1 To Home 
+;================================================
+
+;FOLD Info: Starting Point
+; Previously executed Movement Point: 
+;    PTP End_Service1
+; In Program: 
+;    Service1 ()
+;    (R1\Program\Service Programs\)
+;ENDFOLD (Info Starting Point)
+ 
+;FOLD PTP P10 CONT Vel=100 % H Tool[1]:Gun 1 Base[0];%{PE}%R 8.2.19,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P10, 3:C_DIS, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=FP10
+BAS(#PTP_PARAMS,100)
+PTP XP10 C_DIS
+;ENDFOLD
+;FOLD PTP home CONT Vel=100 % H;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:home, 3:C_DIS, 5:100, 7:H
+$BWDSTART=FALSE
+PDAT_ACT=PH
+FDAT_ACT=Fhome
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP Xhome C_DIS
+;ENDFOLD
+
+;FOLD Info: End Point
+; Next executed Movement Point:
+;    PTP Home
+; In Program: 
+;    P59 ()
+;    (R1\Program\Main Programs\)
+;ENDFOLD (Info: End Point)
+  
+END

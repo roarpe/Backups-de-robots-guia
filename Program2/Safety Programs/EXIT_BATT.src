@@ -1,0 +1,22 @@
+&ACCESS RVP2
+&REL 13
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+DEF EXIT_BATT( )
+
+END
+
+GLOBAL DEF DoAbortLiquidTest ( )
+  ; Subroutine to stop and cancel current
+  ; LIN P40:{x 0,y 0,z -250,a 0,b 0,c 0}
+
+  INTERRUPT OFF 96  
+  WAIT SEC 0.1
+  $OUT[241]=FALSE
+  $OUT[242]=TRUE
+  WAIT SEC 0.5
+  $OUT[242]=FALSE
+   LIN_REL {Y -50,z -400} 
+  WAIT SEC 0.1 
+  INTERRUPT ON 96
+END

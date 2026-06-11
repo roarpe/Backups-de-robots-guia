@@ -1,0 +1,81 @@
+&ACCESS RVP1
+&REL 18
+&COMMENT Service For Tool 1
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Service Programs
+DEF Service2( )
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+;FOLD SPOTTECH INI
+USERSPOT(#INIT)
+;ENDFOLD (SPOTTECH INI)
+;FOLD GRIPPERTECH INI
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+;ENDFOLD (GRIPPERTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+  ;ENDFOLD (USER INI)
+ ;ENDFOLD (INI)
+;================================================
+; MODEL    : CX482
+; IE GROUP : PHEV
+; STATION  : 110
+; ROBOT    : 110R1
+; FUNCTION : Service For Tool 1
+;================================================
+
+
+
+;FOLD PTP home Vel=100 % PDAT1;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:home, 3:, 5:100, 7:PDAT1
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT1
+FDAT_ACT=Fhome
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP Xhome 
+;ENDFOLD
+;FOLD PTP safetypos Vel=100 % PDAT2 Tool[1] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:safetypos, 3:, 5:100, 7:PDAT2
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT2
+FDAT_ACT=Fsafetypos
+BAS(#PTP_PARAMS,100)
+PTP Xsafetypos 
+;ENDFOLD
+
+
+;$OUT[58]=TRUE
+O_SERVP=true
+;FOLD Wait For Return To Home
+;Robot In Service Position
+O_SERVP=TRUE             
+;Wait For Input Return To Home
+WAIT FOR I_RETHP == TRUE
+;ENDFOLD (Wait For Return To Home)
+
+
+;FOLD PTP safetypos Vel=100 % PDAT3 Tool[1] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:safetypos, 3:, 5:100, 7:PDAT3
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT3
+FDAT_ACT=Fsafetypos
+BAS(#PTP_PARAMS,100)
+PTP Xsafetypos 
+;ENDFOLD
+;FOLD PTP home Vel=100 % PDAT4;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:home, 3:, 5:100, 7:PDAT4
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT4
+FDAT_ACT=Fhome
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP Xhome 
+;ENDFOLD
+;Reset Robot In Service Position
+
+;$OUT[58]=FALSE
+O_SERVP=false
+
+END

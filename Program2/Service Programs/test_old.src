@@ -1,0 +1,120 @@
+&ACCESS RVO1
+&PARAM DISKPATH = KRC:\R1\Program\Sub Programs
+DEF test_old( )
+;FOLD INI;%{PE}%V3.2.0,%MKUKATPBASIS,%CINIT,%VCOMMON,%P
+;FOLD BAS INI;%{E}%V3.2.0,%MKUKATPBASIS,%CINIT,%VINIT,%P
+GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+INTERRUPT ON 3 
+BAS (#INITMOV,0 )
+;ENDFOLD (BAS INI)
+;FOLD GRIPPER INI;%{E}%V3.2.0,%MKUKATPGRIPPER,%CINIT,%VINIT,%P
+USER_GRP(0,DUMMY,DUMMY,GDEFAULT)
+;ENDFOLD (GRIPPER INI)
+;FOLD USER INI;%{E}%V3.2.0,%MKUKATPUSER,%CINIT,%VINIT,%P
+;Make your modifications here
+; Activamos salida del robot en caso de incendo
+  INTERRUPT DECL 96 WHEN $SR_RANGE_ACTIVE[16]==FALSE DO DoAbortLiquidTest ( )
+
+;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;================================================
+; MODEL        : CX482
+; IE GROUP     : PHEV
+; STATION      : ST110
+; ROBOT        : 1010R1
+; FUNCTION     : AIR LEAK TEST
+;================================================
+
+;FOLD PTP P10002 Vel=100 % PDAT3 Tool[11]:Gripper Leak Test Base[10]:ST110;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P10002, 3:, 5:100, 7:PDAT3
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT3
+FDAT_ACT=FP10002
+BAS(#PTP_PARAMS,100)
+PTP XP10002 
+;ENDFOLD
+
+; Initialize Gripper
+;FOLD Grps.Vlv_Opn 1 ;%{PE}%MKUKATPUSER
+
+Grps (#Vlv_Opn ,1)
+
+;ENDFOLD
+;FOLD Grps.Part_On 1 ;%{PE}%MKUKATPUSER
+
+Grps (#Part_On ,1)
+
+;ENDFOLD
+
+; Activamos salida del robot en caso de incendo
+INTERRUPT ON 96
+
+IF NOT $IN[12] THEN
+;Part Check OFF Cylinder backward pos $IN[241] AND $IN[243]
+;FOLD Grps.Part_Off 1 ;%{PE}%MKUKATPUSER
+
+Grps (#Part_Off ,1)
+
+;ENDFOLD
+; Set Gripper AIR ON
+;FOLD Grps.Vlv_Cls 1 ;%{PE}%MKUKATPUSER
+
+Grps (#Vlv_Cls ,1)
+
+;ENDFOLD
+ENDIF
+;Tool Request 1
+;FOLD Fordtech.Tool_Req Tool Request: 1 ;%{PE}%MKUKATPUSER
+
+Tool_Req (1)
+
+;ENDFOLD
+
+;Wait tool Ready 1
+;FOLD Fordtech.Wait_Tool_Ready Wait Tool Ready: 1 ;%{PE}%MKUKATPUSER
+
+Wait_Tool_Ready (1)
+
+;ENDFOLD
+
+;Job Ready 1
+;FOLD Fordtech.Job_Rdy Set Job Ready: 1 ;%{PE}%MKUKATPUSER
+
+Job_Ready (1) 
+
+;ENDFOLD
+
+; Reset Gripper AIR OFF
+;FOLD Grps.Vlv_Opn 1 ;%{PE}%MKUKATPUSER
+
+Grps (#Vlv_Opn ,1)
+
+;ENDFOLD
+
+; Desactivamos salida del robot en caso de incendo
+INTERRUPT OFF 96
+
+;Release dynamic base
+
+;Release Station 
+;FOLD Fordtech.Area_Rel Area Release: 1 ;%{PE}%MKUKATPUSER
+
+Area_Rel (1)
+
+;ENDFOLD
+
+;FOLD PTP P10003 Vel=100 % PDAT4 Tool[11]:Gripper Leak Test Base[10]:ST110;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P10003, 3:, 5:100, 7:PDAT4
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT4
+FDAT_ACT=FP10003
+BAS(#PTP_PARAMS,100)
+PTP XP10003 
+;ENDFOLD
+
+;FOLD TORQMON SetDefault;%{PE}%R 8.3.48,%MKUKATPBASIS,%CTQ_MON,%VTQ_DEFAULT,%P 2:TQ_DEFAULT
+SET_TQ_VALUES ( )
+;ENDFOLD
+
+PEXIT:
+
+
+END
