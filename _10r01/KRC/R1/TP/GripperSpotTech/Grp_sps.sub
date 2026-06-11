@@ -1,0 +1,11 @@
+﻿&ACCESS RVP
+&COMMENT GripperTech PLC program
+DEF  Grp_sps ( )
+  
+  LOOP
+    Grp_MonPLC()
+  ENDLOOP
+  ;FOLD ;%{H};
+    END
+  ;ENDFOLD
+  
