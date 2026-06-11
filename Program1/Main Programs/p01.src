@@ -1,0 +1,172 @@
+&ACCESS RV1
+&REL 93
+&COMMENT CX482 FHEV
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Main Programs
+DEF p01( )
+;================================================
+;FOLD INI;%{PE}
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+BACKJUMP=FALSE
+cam_ini()
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+; MODEL     : CX482 
+; IE GROUP  : FHEV
+; STATION   : ST105   
+; ROBOT     : 105R1 
+; FUNCTION  : GLUE ON FLANGE - 2C
+;================================================
+
+;Control TC
+$TIMER[7]=0
+$TIMER_STOP[7]=FALSE
+
+;FOLD PTP HOME Vel=100 % DEFAULT;%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:HOME, 3:, 5:100, 7:DEFAULT
+$BWDSTART=FALSE
+PDAT_ACT=PDEFAULT
+FDAT_ACT=FHOME
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP XHOME 
+;ENDFOLD
+
+;FOLD Start Cycle Timer
+$TIMER[1]=0
+$TIMER_STOP[1]=FALSE
+;ENDFOLD
+
+INFOPOS:
+;FOLD PTP P1wait CONT Vel=100 % PDAT2 Tool[5] Base[0];%{PE}%R 8.3.48,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:P1wait, 3:C_DIS, 5:100, 7:PDAT2
+$BWDSTART=FALSE
+PDAT_ACT=PPDAT2
+FDAT_ACT=FP1wait
+BAS(#PTP_PARAMS,100)
+PTP XP1wait C_DIS
+;ENDFOLD
+
+;if false then   
+   
+;FOLD TYPE INFO
+
+O_TYPE_REQ=FALSE
+WAIT FOR I_TYPE_INFO==0
+O_TYPE_REQ=TRUE
+WAIT FOR (I_TYPE_INFO>0)
+O_TYPE_INFO=I_TYPE_INFO
+
+
+;ENDFOLD
+
+;rack1 o rack2
+
+;endif
+
+WAIT FOR ($IN[49]==TRUE) OR ($IN[50]==TRUE) OR ($IN[51]==TRUE)
+
+IF $in[49]==TRUE THEN 
+   INDICE_RACK=1              ;Variable calculo TC
+   P01pick1 ( )               ; PICK In Station XX
+ ;  IF I_Rethp THEN              ; Return To Home
+;     GOTO HOMEPOS
+;   ENDIF
+   IF BACKJUMP THEN              
+     BACKJUMP=FALSE
+     GOTO INFOPOS
+   ENDIF
+IF CARTJUMP THEN
+cartJUMP=FALSE
+GOTO HOMEPOS
+ENDIF
+  ; P01drop()
+   
+   P01drop_new()
+   
+endif
+
+IF $in[50]==TRUE THEN 
+   INDICE_RACK=2              ;Variable calculo TC
+   P01pick2 ( )                ; PICK In Station XX
+  ; IF I_Rethp THEN              ; Return To Home
+   ;  GOTO HOMEPOS
+   ;ENDIF
+IF CARTJUMP THEN
+cartJUMP=FALSE
+GOTO HOMEPOS
+ENDIF
+   IF BACKJUMP THEN              
+     BACKJUMP=FALSE
+     GOTO INFOPOS
+   ENDIF
+
+ ;  P01drop()
+
+   P01drop_new()
+ENDIF
+
+
+IF $in[51]==TRUE THEN 
+
+   P01pick3 ( )                ; PICK carton XX
+
+
+;FOLD OUT 21 'Area Release 5' State=TRUE ;%{PE}%R 8.3.48,%MKUKATPBASIS,%COUT,%VOUTX,%P 2:21, 3:Area Release 5, 5:TRUE, 6:
+$OUT[21]=TRUE
+;ENDFOLD
+;FOLD TYPE INFO
+
+O_TYPE_REQ=FALSE
+WAIT FOR I_TYPE_INFO==0
+O_TYPE_REQ=TRUE
+WAIT FOR (I_TYPE_INFO>0)
+POS_CARTON=I_TYPE_INFO
+O_TYPE_INFO=I_TYPE_INFO
+O_TYPE_REQ=FALSE
+
+;ENDFOLD
+
+   P01drop3 ( )                ; DROP CARTON XX
+
+IF CARTJUMP THEN
+cartJUMP=FALSE
+GOTO HOMEPOS
+ENDIF
+   IF BACKJUMP THEN              
+     BACKJUMP=FALSE
+     GOTO INFOPOS
+   ENDIF
+
+ENDIF
+
+If false then
+; Solicitar fin de trabajo
+;FOLD Fordtech.End_Work_Req ;%{PE}%MKUKATPUSER
+END_WORK_REQ()
+;ENDFOLD
+endif
+
+HOMEPOS:
+;FOLD PTP HOME  Vel= 100 % DEFAULT;%{PE}%R 5.4.33,%MKUKATPBASIS,%CMOVE,%VPTP,%P 1:PTP, 2:HOME, 3:, 5:100, 7:DEFAULT
+$BWDSTART=FALSE
+PDAT_ACT=PDEFAULT
+FDAT_ACT=FHOME
+BAS(#PTP_PARAMS,100)
+$H_POS=XHOME
+PTP XHOME 
+;ENDFOLD
+
+;FOLD Stop Cyclus Timer
+$TIMER_STOP[1]=TRUE
+$TIMER[6]=$TIMER[1]
+;ENDFOLD
+
+INIT_RS ( )                  ; Reset Job_Ready 1-8
+INIT_EXT ( )                 ; Init Auto_Extern
+END

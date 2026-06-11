@@ -1,0 +1,123 @@
+&ACCESS RVO
+&REL 45
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\ExpertVorgabe
+DEF Ford_User_Sub()
+END
+GLOBAL DEF Ford_User_Decl ()
+  ; Please insert user defined declarations
+  ;FOLD USER DECL
+  
+   
+  ;ENDFOLD (USER DECL)
+END
+GLOBAL DEF Ford_User_Init ()
+  ; Please insert user defined initialization commands
+  ;FOLD USER INIT
+  
+;FOLD INPICKER_INIT
+frame null
+INPICKER_Handler.ProgramFlags.ReceiverAlive = 2
+INPICKER_Handler.ProgramFlags.SenderAlive = 1
+INPICKER_Handler.ProgramFlags.MessageReceived = 100
+
+INPICKER_Handler.DataToSend.Command = 0
+INPICKER_Handler.DataToSend.CameraID = 0
+INPICKER_Handler.DataToSend.ContainerID = 0
+INPICKER_Handler.DataToSend.PartID = 0
+INPICKER_Handler.DataToSend.GraspConfirmation = 0
+Null = { X 0.0, Y 0.0, Z 0.0, A 0.0, B 0.0, C 0.0}
+INPICKER_Handler.DataToSend.RobotPosition = Null
+INPICKER_Handler.DataToSend.Reserved = 0
+INPICKER_Handler.DataToSend.JointPositions = Null
+INPICKER_Handler.DataToSend.Axis6Position = 0
+INPICKER_Handler.DataToSend.Axis7Position = 0
+
+INPICKER_Handler.DataReceived.State = 0
+INPICKER_Handler.DataReceived.Echo = 0
+INPICKER_Handler.DataReceived.LoadedCamera = 0
+INPICKER_Handler.DataReceived.LoadedBin = 0
+INPICKER_Handler.DataReceived.LoadedObject = 0
+INPICKER_Handler.DataReceived.ObjectsDetected = 0
+INPICKER_Handler.DataReceived.ObjectsGraspable = 0
+INPICKER_Handler.DataReceived.FillingPercentage = 0
+INPICKER_Handler.DataReceived.CalibResult = 0
+INPICKER_Handler.DataReceived.RmsTransError = 0
+INPICKER_Handler.DataReceived.RmsRotError = 0
+INPICKER_Handler.DataReceived.MaxErrorTrans = 0
+INPICKER_Handler.DataReceived.MaxErrorRot = 0
+INPICKER_Handler.DataReceived.MaxStdevTrans = 0
+INPICKER_Handler.DataReceived.MaxStdevRot = 0
+INPICKER_Handler.DataReceived.Reserved = 0
+INPICKER_Handler.DataReceived.GraspingPosesReceived = 0
+INPICKER_Handler.DataReceived.TrajPoints = 0
+INPICKER_Handler.DataReceived.PartsToGrasp0.Position = Null
+INPICKER_Handler.DataReceived.PartsToGrasp0.GraspID = 0
+INPICKER_Handler.DataReceived.PartsToGrasp0.ObjToGripperTrans = Null
+INPICKER_Handler.DataReceived.PartsToGrasp0.PreGraspPosesReceived = 0
+INPICKER_Handler.DataReceived.PartsToGrasp0.PreGrasp0 = Null
+;ENDFOLD (INPICKER_INIT)
+
+  ;ENDFOLD (USER INIT)
+END
+GLOBAL DEF Ford_User_Loop ()
+  ;Make your modifications here
+  ;FOLD USER PLC
+
+;FOLD FordTech_V6.0.1
+;FOLD Sps_Sub
+IF I_Spssub THEN
+   O_Spssub=TRUE
+ELSE
+   O_Spssub=FALSE
+ENDIF
+;ENDFOLD (Sps_sub)
+;FOLD Reference Test
+	O_MASTER_TEST_SWITCH_OK=$MASTERINGTEST_SWITCH_OK
+	O_MASTER_TEST_REQ_INT=$MASTERINGTEST_REQ_INT
+;ENDFOLD (Reference Test)
+;FOLD Battery Check
+IF (($ACCU_STATE == #CHARGE_OK_LOW) OR ($ACCU_STATE == #CHARGE_TEST_NOK) OR ($ACCU_STATE == #CHARGE_NOK) OR ($ACCU_STATE == #CHARGE_OFF)) THEN
+  O_BATTERY_LOW = TRUE
+ELSE
+  O_BATTERY_LOW = FALSE
+ENDIF
+;ENDFOLD (Battery Check)
+;ENDFOLD (FordTech_V6.0.1)
+IF (INPICKER_BYPASS==FALSE)THEN
+InPickerController()
+ENDIF
+
+;FOLD PART MONITOR
+   
+IF (($IN[243]==FALSE) OR ($IN[244]==FALSE) OR ($IN[243]==FALSE) OR ($IN[243]==FALSE)) THEN
+   BAT_IN=FALSE
+ELSE
+   BAT_IN=TRUE
+ENDIF
+
+IF $IN[60]==FALSE THEN
+   CART_IN=FALSE
+ELSE
+   CART_IN=TRUE
+ENDIF   
+   
+IF PART_MONITOR==TRUE THEN
+   
+   IF ((BAT_MONITOR==TRUE) AND (BAT_IN==FALSE)) OR ((CART_MONITOR==TRUE) AND (CART_IN==FALSE)) THEN      
+         $OUT[5]=TRUE
+   ELSE
+      $OUT[5]=FALSE
+   ENDIF
+   
+ELSE
+         
+   $OUT[5]=FALSE   
+     
+ENDIF      
+;ENDFOLD
+
+
+  ;ENDFOLD (USER PLC)
+
+END

@@ -1,0 +1,47 @@
+&ACCESS RVP2
+&REL 89
+&COMMENT Service For Tool 1
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program\Sevice Programs
+DEFDAT  Service1
+;FOLD EXTERNAL DECLARATIONS;%{PE}%MKUKATPBASIS,%CEXT,%VCOMMON,%P
+;FOLD GRIPPERTECH EXT
+EXT  H50 (INT  :IN,INT  :IN,INT  :IN,GRP_TYP  :IN )
+;ENDFOLD (GRIPPERTECH EXT)
+;FOLD SPOTTECH EXT
+EXT  USERSPOT (S_COMMAND  :IN,SPOT_TYPE  :IN )
+;ENDFOLD (SPOTTECH EXT)
+;FOLD BASISTECH EXT;%{PE}%MKUKATPBASIS,%CEXT,%VEXT,%P
+EXT  BAS (BAS_COMMAND  :IN,REAL  :IN )
+DECL INT SUCCESS
+;ENDFOLD (BASISTECH EXT)
+;FOLD USER EXT;%{E}%MKUKATPUSER,%CEXT,%VEXT,%P
+;Make your modifications here
+;ENDFOLD (USER EXT)
+;ENDFOLD (EXTERNAL DECLARATIONS)
+
+;******************************
+;*     E6POS Declarations     *
+;******************************
+
+DECL E6POS XStart_Service1={X -414.174530,Y 1302.25586,Z 1457.92151,A -88.9551926,B 22.2454205,C 175.857361,S 6,T 27,E1 0.0,E2 0.0,E3 0.0,E4 0.0,E5 0.0,E6 0.0}
+DECL E6POS XServicePos1={X -1298.66736,Y 331.775848,Z 1299.16064,A -9.10778522,B 0.747773409,C 178.592316,S 6,T 27,E1 0.0,E2 0.0,E3 0.0,E4 0.0,E5 0.0,E6 0.0}
+DECL E6POS XEnd_Service1={X -414.174530,Y 1302.25586,Z 1457.92151,A -88.9551926,B 22.2454205,C 175.857361,S 6,T 27,E1 0.0,E2 0.0,E3 0.0,E4 0.0,E5 0.0,E6 0.0}
+
+;******************************
+;*     FDAT Declarations      *
+;******************************
+
+DECL FDAT FStart_Service1={TOOL_NO 11,BASE_NO 0,IPO_FRAME #BASE,POINT2[] " ",TQ_STATE FALSE}
+DECL FDAT FServicePos1={TOOL_NO 11,BASE_NO 0,IPO_FRAME #BASE,POINT2[] " ",TQ_STATE FALSE}
+DECL FDAT FEnd_Service1={TOOL_NO 11,BASE_NO 0,IPO_FRAME #BASE,POINT2[] " ",TQ_STATE FALSE}
+
+;******************************
+;*  PDAT & LDAT Declarations  *
+;******************************
+
+DECL PDAT PH={VEL 100.000,ACC 100.000,APO_DIST 100.000,APO_MODE #CDIS,EXAX_IGN 0}
+
+DECL BASIS_SUGG_T LAST_BASIS={POINT1[] "P0                      ",POINT2[] "P0                      ",CP_PARAMS[] "CPDAT0                  ",PTP_PARAMS[] "PDAT0                   ",CONT[] "                        ",CP_VEL[] "2.0                     ",PTP_VEL[] " 100                    ",SYNC_PARAMS[] "SYNCDAT                 ",SPL_NAME[] "S0                      ",A_PARAMS[] "ADAT0                   "}
+ENDDAT
