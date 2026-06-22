@@ -1,0 +1,176 @@
+&ACCESS RVO
+&REL 53
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\ExpertVorgabe
+DEF Ford_User_Sub()
+END
+GLOBAL DEF Ford_User_Decl ()
+  ; Please insert user defined declarations
+  ;FOLD USER DECL
+  
+   
+  ;ENDFOLD (USER DECL)
+END
+GLOBAL DEF Ford_User_Init ()
+  ; Please insert user defined initialization commands
+  ;FOLD USER INIT
+  
+;FOLD INPICKER_INIT
+INPICKER_ResetAll()
+;ENDFOLD (INPICKER_INIT)
+
+  ;ENDFOLD (USER INIT)
+END
+GLOBAL DEF Ford_User_Loop ()
+  ;Make your modifications here
+  ;FOLD USER PLC
+
+;FOLD FordTech_V6.0.1
+;FOLD Sps_Sub
+;IF I_Spssub THEN
+  ; O_Spssub=TRUE
+;ELSE
+;   O_Spssub=FALSE
+;ENDIF
+;ENDFOLD (Sps_sub)
+;FOLD Reference Test
+  ; O_MASTER_TEST_SWITCH_OK=$MASTERINGTEST_SWITCH_OK
+ ;  O_MASTER_TEST_REQ_INT=$MASTERINGTEST_REQ_INT
+;ENDFOLD (Reference Test)
+;FOLD Battery Check
+;IF (($ACCU_STATE == #CHARGE_OK_LOW) OR ($ACCU_STATE == #CHARGE_TEST_NOK) OR ($ACCU_STATE == #CHARGE_NOK) OR ($ACCU_STATE == #CHARGE_OFF)) THEN
+;  O_BATTERY_LOW = TRUE
+;ELSE
+;  O_BATTERY_LOW = FALSE
+;ENDIF
+;ENDFOLD (Battery Check)
+;fold 
+;fold
+I_RACK_NR_AUX=I_RACK_NR
+
+INPICKER_Handler.DataToSend.userfield0[1]=48
+INPICKER_Handler.DataToSend.userfield0[2]=48
+INPICKER_Handler.DataToSend.userfield0[3]=48
+
+IF (I_RACK_NR_AUX>=200) THEN
+   INPICKER_Handler.DataToSend.userfield0[1]=50
+   I_RACK_NR_AUX=I_RACK_NR_AUX-200
+ENDIF
+IF (I_RACK_NR_AUX>=100) THEN
+   INPICKER_Handler.DataToSend.userfield0[1]=49
+   I_RACK_NR_AUX=I_RACK_NR_AUX-100
+ENDIF
+IF (I_RACK_NR_AUX>=90) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=57
+   I_RACK_NR_AUX=I_RACK_NR_AUX-90
+ENDIF
+IF (I_RACK_NR_AUX>=80) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=56
+   I_RACK_NR_AUX=I_RACK_NR_AUX-80
+ENDIF
+IF (I_RACK_NR_AUX>=70) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=55
+   I_RACK_NR_AUX=I_RACK_NR_AUX-70
+ENDIF
+IF (I_RACK_NR_AUX>=60) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=54
+   I_RACK_NR_AUX=I_RACK_NR_AUX-60
+ENDIF
+IF (I_RACK_NR_AUX>=50) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=53
+   I_RACK_NR_AUX=I_RACK_NR_AUX-50
+ENDIF
+IF (I_RACK_NR_AUX>=40) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=52
+   I_RACK_NR_AUX=I_RACK_NR_AUX-40
+ENDIF
+IF (I_RACK_NR_AUX>=30) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=51
+   I_RACK_NR_AUX=I_RACK_NR_AUX-30
+ENDIF
+IF (I_RACK_NR_AUX>=20) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=50
+   I_RACK_NR_AUX=I_RACK_NR_AUX-20
+ENDIF
+IF (I_RACK_NR_AUX>=10) THEN
+   INPICKER_Handler.DataToSend.userfield0[2]=49
+   I_RACK_NR_AUX=I_RACK_NR_AUX-10
+ENDIF
+IF (I_RACK_NR_AUX==9) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=57
+   I_RACK_NR_AUX=I_RACK_NR_AUX-9
+ENDIF
+IF (I_RACK_NR_AUX==8) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=56
+   I_RACK_NR_AUX=I_RACK_NR_AUX-8
+ENDIF
+IF (I_RACK_NR_AUX==7) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=55
+   I_RACK_NR_AUX=I_RACK_NR_AUX-7
+ENDIF
+IF (I_RACK_NR_AUX==6) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=54
+   I_RACK_NR_AUX=I_RACK_NR_AUX-6
+ENDIF
+IF (I_RACK_NR_AUX==5) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=53
+   I_RACK_NR_AUX=I_RACK_NR_AUX-5
+ENDIF
+IF (I_RACK_NR_AUX==4) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=52
+   I_RACK_NR_AUX=I_RACK_NR_AUX-4
+ENDIF
+IF (I_RACK_NR_AUX==3) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=51
+   I_RACK_NR_AUX=I_RACK_NR_AUX-3
+ENDIF
+IF (I_RACK_NR_AUX==2) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=50
+   I_RACK_NR_AUX=I_RACK_NR_AUX-2
+ENDIF
+IF (I_RACK_NR_AUX==1) THEN
+   INPICKER_Handler.DataToSend.userfield0[3]=49
+   I_RACK_NR_AUX=I_RACK_NR_AUX-1
+ENDIF
+
+
+
+;endfold
+;endfold
+
+;ENDFOLD (FordTech_V6.0.1)
+
+IF (INPICKER_BYPASS==FALSE)THEN
+InPickerController()
+;INPICKER_Handler.DataToSend.userfield0[]=I_RACK_NR
+ENDIF
+
+;FOLD PART MONITOR
+   
+;IF ($IN[243]==FALSE)OR ($IN[244]==FALSE) THEN
+   ;BAT_IN=FALSE
+;ELSE
+   ;BAT_IN=TRUE
+;ENDIF
+
+;IF $IN[60]==FALSE THEN
+   ;CART_IN=FALSE
+;ELSE
+   ;CART_IN=TRUE
+;ENDIF   
+   
+;IF PART_MONITOR==TRUE THEN
+;   IF ((BAT_MONITOR==TRUE) AND (BAT_IN==FALSE)) OR ((CART_MONITOR==TRUE) AND (CART_IN==FALSE)) THEN      
+;         $OUT[5]=TRUE
+;   ELSE
+;      $OUT[5]=FALSE
+;   ENDIF
+   
+;ELSE
+;   $OUT[5]=FALSE   
+;ENDIF      
+;ENDFOLD
+
+  ;ENDFOLD (USER PLC)
+
+END

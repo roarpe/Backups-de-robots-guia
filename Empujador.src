@@ -1,0 +1,91 @@
+&ACCESS R
+&REL 6
+&COMMENT CTRL EMPUJADORES
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+DEF Empujador(num:IN, sts:IN, ctrl:IN )
+;################################################
+; PROYECTO: MAFELEC PLANTA DE BATERIAS
+; ROBOT: 121_R1
+; PROGRAMA: GESTION MOVIMIENTOS DE EMPUJADORES
+; CREADO POR: Alejandro Company(zaisor robotics)
+; FECHA: 28-NOVIEMBRE-2022
+; MODIFICADO POR:
+; FECHA MODIFICACION: 29-DICIEMBRE-2022
+;################################################
+
+INT num
+BOOL ctrl
+CHAR sts
+
+SWITCH num
+
+CASE 1
+; ##################################
+; ####  SELECCION EMPUJADOR 1   ####
+; ##################################
+
+SWITCH sts
+
+CASE "A"
+; ##################################
+; ####  SELECCION AVANCE        ####
+; ##################################
+O_121R1Y11B=FALSE
+O_121R1Y11A=TRUE
+
+IF CTRL THEN
+WAIT FOR I_121R1S111A
+ENDIF
+
+CASE "R"
+; ##################################
+; ####  SELECCION RETROCESO     ####
+; ##################################
+O_121R1Y11A=FALSE
+O_121R1Y11B=TRUE
+
+IF CTRL THEN
+WAIT FOR I_121R1S111B
+ENDIF
+
+ENDSWITCH
+
+
+CASE 2
+; ##################################
+; ####  SELECCION EMPUJADOR 2   ####
+; ##################################
+SWITCH sts
+
+CASE "A"
+; ##################################
+; ####  SELECCION AVANCE        ####
+; ##################################
+O_121R1Y12B=FALSE
+O_121R1Y12A=TRUE
+
+IF CTRL THEN
+WAIT FOR I_121R1S121A
+ENDIF
+
+CASE "R"
+; ##################################
+; ####  SELECCION RETROCESO     ####
+; ##################################
+O_121R1Y12A=FALSE
+O_121R1Y12B=TRUE
+
+IF CTRL THEN
+WAIT FOR I_121R1S121B
+ENDIF
+
+ENDSWITCH
+
+DEFAULT
+; #### SELECCION CODIGO ERRONEO ####
+HALT
+; ##################################
+ENDSWITCH
+
+END

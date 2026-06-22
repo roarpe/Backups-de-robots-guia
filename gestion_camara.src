@@ -1,0 +1,47 @@
+&ACCESS RVO6
+&REL 10
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+DEF gestion_camara( )
+
+
+END
+GLOBAL DEF CAM_INI()
+
+INPICKER_Handler.DataToSend.command=0
+INPICKER_Handler.DataToSend.CameraID=0
+INPICKER_Handler.DataToSend.ContainerID=0
+INPICKER_Handler.DataToSend.GraspConfirmation=0
+INPICKER_Handler.datatosend.partid=0
+
+END
+GLOBAL DEF CAM_CALIB_INI()
+
+INPICKER_Handler.DataToSend.command=0
+INPICKER_Handler.DataToSend.CameraID=0
+INPICKER_Handler.DataToSend.ContainerID=0
+INPICKER_Handler.DataToSend.GraspConfirmation=0
+INPICKER_Handler.datatosend.partid=0
+
+END
+
+GLOBAL DEF CAM_CALIB_FOTO(P_IN :IN)
+INT P_IN
+
+INPICKER_Handler.DataToSend.command=0
+wait for (INPICKER_Handler.DataReceived.state==0)
+INPICKER_Handler.DataToSend.GraspConfirmation=P_IN
+INPICKER_Handler.DataToSend.command=3
+wait for (INPICKER_Handler.DataReceived.state==30)
+
+END
+
+GLOBAL DEF CAM_CALIB_END()
+
+
+INPICKER_Handler.DataToSend.command=0
+wait for (INPICKER_Handler.DataReceived.state==0)
+INPICKER_Handler.DataToSend.command=4
+wait for (INPICKER_Handler.DataReceived.state==30)
+
+END
